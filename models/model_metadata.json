@@ -1,0 +1,231 @@
+{
+  "model_name": "Baseline: Logistic Regression",
+  "test_metrics": {
+    "accuracy": 0.8569015814524796,
+    "precision": 0.7438650306748467,
+    "recall": 0.6186224489795918,
+    "f1": 0.6754874651810585,
+    "roc_auc": 0.908843644889705
+  },
+  "importance_method": "permutation importance (drop in ROC-AUC)",
+  "feature_importance": [
+    {
+      "feature": "marital_status",
+      "importance": 0.09603
+    },
+    {
+      "feature": "capital_gain",
+      "importance": 0.03783
+    },
+    {
+      "feature": "age",
+      "importance": 0.03261
+    },
+    {
+      "feature": "education_num",
+      "importance": 0.02988
+    },
+    {
+      "feature": "occupation",
+      "importance": 0.01553
+    },
+    {
+      "feature": "relationship",
+      "importance": 0.00913
+    },
+    {
+      "feature": "hours_per_week",
+      "importance": 0.009
+    },
+    {
+      "feature": "sex",
+      "importance": 0.00735
+    },
+    {
+      "feature": "capital_loss",
+      "importance": 0.00365
+    },
+    {
+      "feature": "workclass",
+      "importance": 0.00141
+    },
+    {
+      "feature": "native_country",
+      "importance": 0.00111
+    },
+    {
+      "feature": "race",
+      "importance": 0.00033
+    }
+  ],
+  "schema": {
+    "numeric": {
+      "age": {
+        "min": 17.0,
+        "max": 90.0,
+        "median": 37.0
+      },
+      "education_num": {
+        "min": 1.0,
+        "max": 16.0,
+        "median": 10.0
+      },
+      "capital_gain": {
+        "min": 0.0,
+        "max": 99999.0,
+        "median": 0.0
+      },
+      "capital_loss": {
+        "min": 0.0,
+        "max": 4356.0,
+        "median": 0.0
+      },
+      "hours_per_week": {
+        "min": 1.0,
+        "max": 99.0,
+        "median": 40.0
+      }
+    },
+    "categorical": {
+      "workclass": {
+        "options": [
+          "?",
+          "Federal-gov",
+          "Local-gov",
+          "Never-worked",
+          "Private",
+          "Self-emp-inc",
+          "Self-emp-not-inc",
+          "State-gov",
+          "Without-pay"
+        ],
+        "default": "Private"
+      },
+      "marital_status": {
+        "options": [
+          "Divorced",
+          "Married-AF-spouse",
+          "Married-civ-spouse",
+          "Married-spouse-absent",
+          "Never-married",
+          "Separated",
+          "Widowed"
+        ],
+        "default": "Married-civ-spouse"
+      },
+      "occupation": {
+        "options": [
+          "?",
+          "Adm-clerical",
+          "Armed-Forces",
+          "Craft-repair",
+          "Exec-managerial",
+          "Farming-fishing",
+          "Handlers-cleaners",
+          "Machine-op-inspct",
+          "Other-service",
+          "Priv-house-serv",
+          "Prof-specialty",
+          "Protective-serv",
+          "Sales",
+          "Tech-support",
+          "Transport-moving"
+        ],
+        "default": "Prof-specialty"
+      },
+      "relationship": {
+        "options": [
+          "Husband",
+          "Not-in-family",
+          "Other-relative",
+          "Own-child",
+          "Unmarried",
+          "Wife"
+        ],
+        "default": "Husband"
+      },
+      "race": {
+        "options": [
+          "Amer-Indian-Eskimo",
+          "Asian-Pac-Islander",
+          "Black",
+          "Other",
+          "White"
+        ],
+        "default": "White"
+      },
+      "sex": {
+        "options": [
+          "Female",
+          "Male"
+        ],
+        "default": "Male"
+      },
+      "native_country": {
+        "options": [
+          "?",
+          "Cambodia",
+          "Canada",
+          "China",
+          "Columbia",
+          "Cuba",
+          "Dominican-Republic",
+          "Ecuador",
+          "El-Salvador",
+          "England",
+          "France",
+          "Germany",
+          "Greece",
+          "Guatemala",
+          "Haiti",
+          "Honduras",
+          "Hong",
+          "Hungary",
+          "India",
+          "Iran",
+          "Ireland",
+          "Italy",
+          "Jamaica",
+          "Japan",
+          "Laos",
+          "Mexico",
+          "Nicaragua",
+          "Outlying-US(Guam-USVI-etc)",
+          "Peru",
+          "Philippines",
+          "Poland",
+          "Portugal",
+          "Puerto-Rico",
+          "Scotland",
+          "South",
+          "Taiwan",
+          "Thailand",
+          "Trinadad&Tobago",
+          "United-States",
+          "Vietnam",
+          "Yugoslavia"
+        ],
+        "default": "United-States"
+      }
+    }
+  },
+  "input_columns": [
+    "age",
+    "education_num",
+    "capital_gain",
+    "capital_loss",
+    "hours_per_week",
+    "workclass",
+    "marital_status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native_country"
+  ],
+  "trained_at": "2026-11-21T13:34:59",
+  "versions": {
+    "python": "3.11.9",
+    "scikit-learn": "1.9.1"
+  }
+}
