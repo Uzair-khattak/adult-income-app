@@ -11,7 +11,57 @@ import streamlit as st
 
 API_URL = os.environ.get("API_URL", "http://127.0.0.1:8000").rstrip("/")
 
+
+@st.cache_resource(show_spinner="Starting the prediction API ...")
+def start_embedded_api():
+    """Used only in the deployment bundle (main.py sits next to this file, e.g. on Streamlit Cloud):
+    starts the FastAPI service in a background thread of this process, so the app still talks to the API over HTTP.
+    Returns (started, message) - the message explains a failure."""
+    import importlib.util
+    import sys
+    import threading
+    import time
+    import traceback
+    from pathlib import Path
+    here = Path(__file__).resolve().parent
+    if not (here / "main.py").exists():
+        return True, "local layout: API is started separately with uvicorn"
+    try:
+        requests.get(f"{API_URL}/health", timeout=1)
+        return True, "API already running"
+    except Exception:
+        pass
+    errors = []
+    try:
+        import uvicorn
+        sys.path.insert(0, str(here))
+        spec = importlib.util.spec_from_file_location("income_api_main", here / "main.py")
+        api_main = importlib.util.module_from_spec(spec)
+        sys.modules["income_api_main"] = api_main
+        spec.loader.exec_module(api_main)           # loads the model here -> errors are caught below
+        port = int(API_URL.rsplit(":", 1)[-1])
+        server = uvicorn.Server(uvicorn.Config(api_main.app, host="127.0.0.1", port=port, log_level="warning"))
+
+        def run():
+            try:
+                server.run()
+            except BaseException:
+                errors.append(traceback.format_exc())
+
+        threading.Thread(target=run, daemon=True).start()
+    except Exception:
+        return False, traceback.format_exc()
+    for _ in range(80):
+        try:
+            requests.get(f"{API_URL}/health", timeout=1)
+            return True, "embedded API started"
+        except Exception:
+            time.sleep(0.5)
+    return False, "API thread did not answer in 40 s.\n" + "\n".join(errors)
+
+
 st.set_page_config(page_title="Adult Income Predictor", page_icon="💰", layout="wide")
+api_started, api_message = start_embedded_api()
 st.title("💰 Adult Income Predictor")
 st.caption("Predicts whether a person's yearly income exceeds $50,000 · model served through a FastAPI backend")
 
@@ -28,7 +78,9 @@ try:
     importance = api_get("/feature-importance?top_k=5")
     schema = api_get("/schema")
 except Exception as exc:
-    st.error(f"Cannot reach the API at {API_URL}. Start it with:  uvicorn main:app --port 8000 --app-dir Q3/api\n\n{exc}")
+    st.error(f"Cannot reach the API at {API_URL}. Locally start it with:  uvicorn main:app --port 8000 --app-dir Q3/api")
+    st.write("Startup details:")
+    st.code(f"{api_message}\n\n{exc}")
     st.stop()
 
 # ---------------------------------------------------------------- sidebar: model info
